@@ -1,16 +1,15 @@
-pipeline {
-	agent none
-	
-	environment {
-		def mvnHome = too 'M3'	
-	}
-	stages{
-		stage('test'){
-			agent { label 'master'} 
-			steps{
-				sh "sleep 20s" 
-				sh "echo hstream1"
+satge('Build'){
+	sh 'echo build'
+}
+stage('Test'){
+	parallel test01: {
+			node('master'){
+				sh 'echo master'
+			}
+	},
+		test02: {
+			node('WebGoatNode'){
+				sh 'webgoatnode'
 			}
 		}
-	}
 }
