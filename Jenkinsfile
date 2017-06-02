@@ -1,5 +1,5 @@
 pipeline {
-	agent 'master'
+	agent none
 	
 	environment {
 		def mvnHome = too 'M3'	
@@ -9,14 +9,14 @@ pipeline {
 		stage('Functional Tests') {
 			parallel (
 				"stream 1" : { 
-					node ('master') {                          
+					node {                          
 						sh "sleep 20s" 
 						sh "echo hstream1"
 					} 
 				},
 
 				"stream 2" : { 
-					node ('master') { 
+					node  { 
 						sh "echo hello2"
 						sh "hashtag fail"                                                       
 					} 
