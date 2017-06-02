@@ -14,12 +14,12 @@ stage ('Build'){
 		}
 	}
 }
-stage('Build'){
+stage('Test'){
 	node('master'){
 		sh "echo build"
 	}
 }
-stage('Test'){
+stage('Deploy'){
 	parallel test01: {
 			node('master'){
 				sh "echo master"
