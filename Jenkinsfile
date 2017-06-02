@@ -14,6 +14,8 @@ stage ('Build'){
 
 stage('Static Analysis') { 
 	node('WebGoatNode'){
+		def mvnHome
+		mvnHome = tool 'M3'
 		withSonarQubeEnv('SonarQube') {
 			if (isUnix()) {
 				sh "'${mvnHome}/bin/mvn' $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN"
