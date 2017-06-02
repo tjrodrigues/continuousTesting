@@ -11,10 +11,6 @@ pipeline {
 				sh "sleep 20s" 
 				sh "echo hstream1"
 			}
-			agent { label 'WebGoatNode'}
-			steps {		
-				sh "echo hello2"                                                      
-			}
 		}
 	}
 }
