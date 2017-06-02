@@ -27,9 +27,9 @@ stage('Static Analysis') {
 }
 
 stage('Unit Test') { 
-	def mvnHome
-	mvnHome = tool 'M3'
 	node('WebGoatNode'){
+		def mvnHome
+		mvnHome = tool 'M3'
 		if (isUnix()) {
 			sh "'${mvnHome}/bin/mvn' test"
 		} else {
