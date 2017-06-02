@@ -1,4 +1,4 @@
-stage('Build'){
+testage('Build'){
 	node('master'){
 		sh "echo build"
 	}
@@ -11,7 +11,7 @@ stage('Test'){
 	},
 		test02: {
 			node('WebGoatNode'){
-				sh "webgoatnode"
+				sh "echo webgoatnode"
 			}
 		}
 }
