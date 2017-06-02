@@ -27,6 +27,8 @@ stage('Static Analysis') {
 }
 
 stage('Unit Test') { 
+	def mvnHome
+	mvnHome = tool 'M3'
 	node('WebGoatNode'){
 		if (isUnix()) {
 			sh "'${mvnHome}/bin/mvn' test"
@@ -37,12 +39,23 @@ stage('Unit Test') {
 	}
 }
 
-stage('Test'){
+stage('Deploy'){
 	node('master'){
-		sh "echo build"
+		sh './clean-env.sh'
+		sh "./make-docker.sh"
+		sh './run-webgoat-docker-app-test.sh'
+		waitUntil {
+			// Wait until app is up and running
+			try {
+				sh 'timeout 240 wget --retry-connrefused --tries=240 --waitretry=10 http://localhost:8181/WebGoat/login' // -o /dev/null
+				return true
+			} catch (exception) {
+				return false
+			}
+		}
 	}
 }
-stage('Deploy'){
+stage('Functinal Tests'){
 	parallel test01: {
 			node('master'){
 				sh "echo master"
