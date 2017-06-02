@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generated="20170529 16:09:41.532" generator="Robot 3.0.2 (Python 2.7.12 on linux2)">
+<suite source="/media/tiago/JenkinsDisk/jenkins/jenkinsAgentDir/workspace/WebGoatPipeline/rf/tests/web-tests.robot" id="s1" name="Web-Tests">
+<kw type="setup" name="Setup User" library="keywords">
+<kw name="Open Application" library="keywords">
+<kw name="Open Browser" library="Selenium2Library">
+<doc>Opens a new browser instance to given URL.</doc>
+<arguments>
+<arg>${HOMEPAGE}</arg>
+<arg>${BROWSER}</arg>
+</arguments>
+<msg timestamp="20170529 16:09:41.895" level="INFO">Opening browser 'chrome' to base url 'http://localhost:8181/WebGoat/login'</msg>
+<status status="PASS" endtime="20170529 16:09:44.389" starttime="20170529 16:09:41.895"></status>
+</kw>
+<kw name="Wait Until Element Is Visible" library="Selenium2Library">
+<doc>Waits until element specified with `locator` is visible.</doc>
+<arguments>
+<arg>${SingInBtn}</arg>
+</arguments>
+<status status="PASS" endtime="20170529 16:09:44.542" starttime="20170529 16:09:44.389"></status>
+</kw>
+<status status="PASS" endtime="20170529 16:09:44.542" starttime="20170529 16:09:41.894"></status>
+</kw>
+<kw name="Register User" library="keywords">
+<kw name="Click Link" library="Selenium2Library">
+<doc>Clicks a link identified by locator.</doc>
+<arguments>
+<arg>xpath=.//*[@id='main-content']/form/div[3]/a</arg>
+</arguments>
+<msg timestamp="20170529 16:09:44.543" level="INFO">Clicking link 'xpath=.//*[@id='main-content']/form/div[3]/a'.</msg>
+<status status="PASS" endtime="20170529 16:09:45.356" starttime="20170529 16:09:44.542"></status>
+</kw>
+<kw name="Wait Until Element Is Visible" library="Selenium2Library">
+<doc>Waits until element specified with `locator` is visible.</doc>
+<arguments>
+<arg>xpath=.//*[@id='matchingPassword']</arg>
+</arguments>
+<status status="PASS" endtime="20170529 16:09:45.515" starttime="20170529 16:09:45.356"></status>
+</kw>
+<kw name="Input Text" library="Selenium2Library">
+<doc>Types the given `text` into text field identified by `locator`.</doc>
+<arguments>
+<arg>xpath=.//*[@id='username']</arg>
+<arg>${username}</arg>
+</arguments>
+<msg timestamp="20170529 16:09:45.516" level="INFO">Typing text 'robotfrmw3' into text field 'xpath=.//*[@id='username']'</msg>
+<status status="PASS" endtime="20170529 16:09:46.196" starttime="20170529 16:09:45.515"></status>
+</kw>
+<kw name="Input Text" library="Selenium2Library">
+<doc>Types the given `text` into text field identified by `locator`.</doc>
+<arguments>
+<arg>xpath=.//*[@id='password']</arg>
+<arg>${password}</arg>
+</arguments>
+<msg timestamp="20170529 16:09:46.197" level="INFO">Typing text 'robotfrmw' into text field 'xpath=.//*[@id='password']'</msg>
+<status status="PASS" endtime="20170529 16:09:46.554" starttime="20170529 16:09:46.196"></status>
+</kw>
+<kw name="Input Text" library="Selenium2Library">
+<doc>Types the given `text` into text field identified by `locator`.</doc>
+<arguments>
+<arg>xpath=.//*[@id='matchingPassword']</arg>
+<arg>${password}</arg>
+</arguments>
+<msg timestamp="20170529 16:09:46.555" level="INFO">Typing text 'robotfrmw' into text field 'xpath=.//*[@id='matchingPassword']'</msg>
+<status status="PASS" endtime="20170529 16:09:46.900" starttime="20170529 16:09:46.554"></status>
+</kw>
+<kw name="Select Checkbox" library="Selenium2Library">
+<doc>Selects checkbox identified by `locator`.</doc>
+<arguments>
+<arg>xpath=.//*[@id='main-content']/fieldset/form/div[5]/div/div/label/input</arg>
+</arguments>
+<msg timestamp="20170529 16:09:46.901" level="INFO">Selecting checkbox 'xpath=.//*[@id='main-content']/fieldset/form/div[5]/div/div/label/input'.</msg>
+<status status="PASS" endtime="20170529 16:09:47.175" starttime="20170529 16:09:46.900"></status>
+</kw>
+<kw name="Click Button" library="Selenium2Library">
+<doc>Clicks a button identified by `locator`.</doc>
+<arguments>
+<arg>xpath=.//*[@id='main-content']/fieldset/form/div[6]/div/button</arg>
+</arguments>
+<msg timestamp="20170529 16:09:47.176" level="INFO">Clicking button 'xpath=.//*[@id='main-content']/fieldset/form/div[6]/div/button'.</msg>
+<status status="PASS" endtime="20170529 16:09:47.460" starttime="20170529 16:09:47.175"></status>
+</kw>
+<kw name="Wait Until Element Is Visible" library="Selenium2Library">
+<doc>Waits until element specified with `locator` is visible.</doc>
+<arguments>
+<arg>xpath=.//*[@id='show-hints-button']</arg>
+<arg>timeout=60</arg>
+</arguments>
+<status status="PASS" endtime="20170529 16:09:48.695" starttime="20170529 16:09:47.460"></status>
+</kw>
+<status status="PASS" endtime="20170529 16:09:48.696" starttime="20170529 16:09:44.542"></status>
+</kw>
+<kw name="Close Browser" library="Selenium2Library">
+<doc>Closes the current browser.</doc>
+<status status="PASS" endtime="20170529 16:09:48.810" starttime="20170529 16:09:48.696"></status>
+</kw>
+<status status="PASS" endtime="20170529 16:09:48.810" starttime="20170529 16:09:41.894"></status>
+</kw>
+<test id="s1-t1" name="Login Into Application">
+<kw name="Open Application" library="keywords">
+<kw name="Open Browser" library="Selenium2Library">
+<doc>Opens a new browser instance to given URL.</doc>
+<arguments>
+<arg>${HOMEPAGE}</arg>
+<arg>${BROWSER}</arg>
+</arguments>
+<msg timestamp="20170529 16:09:48.812" level="INFO">Opening browser 'chrome' to base url 'http://localhost:8181/WebGoat/login'</msg>
+<status status="PASS" endtime="20170529 16:09:51.332" starttime="20170529 16:09:48.812"></status>
+</kw>
+<kw name="Wait Until Element Is Visible" library="Selenium2Library">
+<doc>Waits until element specified with `locator` is visible.</doc>
+<arguments>
+<arg>${SingInBtn}</arg>
+</arguments>
+<status status="PASS" endtime="20170529 16:09:51.476" starttime="20170529 16:09:51.332"></status>
+</kw>
+<status status="PASS" endtime="20170529 16:09:51.476" starttime="20170529 16:09:48.812"></status>
+</kw>
+<kw name="Login" library="keywords">
+<kw name="Input Text" library="Selenium2Library">
+<doc>Types the given `text` into text field identified by `locator`.</doc>
+<arguments>
+<arg>xpath=.//*[@id='exampleInputEmail1']</arg>
+<arg>${username}</arg>
+</arguments>
+<msg timestamp="20170529 16:09:51.477" level="INFO">Typing text 'robotfrmw3' into text field 'xpath=.//*[@id='exampleInputEmail1']'</msg>
+<status status="PASS" endtime="20170529 16:09:52.083" starttime="20170529 16:09:51.477"></status>
+</kw>
+<kw name="Input Text" library="Selenium2Library">
+<doc>Types the given `text` into text field identified by `locator`.</doc>
+<arguments>
+<arg>xpath=.//*[@id='exampleInputPassword1']</arg>
+<arg>${password}</arg>
+</arguments>
+<msg timestamp="20170529 16:09:52.084" level="INFO">Typing text 'robotfrmw' into text field 'xpath=.//*[@id='exampleInputPassword1']'</msg>
+<status status="PASS" endtime="20170529 16:09:52.484" starttime="20170529 16:09:52.083"></status>
+</kw>
+<kw name="Click Button" library="Selenium2Library">
+<doc>Clicks a button identified by `locator`.</doc>
+<arguments>
+<arg>xpath=.//*[@id='main-content']/form/button</arg>
+</arguments>
+<msg timestamp="20170529 16:09:52.485" level="INFO">Clicking button 'xpath=.//*[@id='main-content']/form/button'.</msg>
+<status status="PASS" endtime="20170529 16:09:53.310" starttime="20170529 16:09:52.485"></status>
+</kw>
+<kw name="Wait Until Element Is Visible" library="Selenium2Library">
+<doc>Waits until element specified with `locator` is visible.</doc>
+<arguments>
+<arg>xpath=.//*[@id='show-hints-button']</arg>
+<arg>timeout=60</arg>
+</arguments>
+<status status="PASS" endtime="20170529 16:09:54.065" starttime="20170529 16:09:53.310"></status>
+</kw>
+<status status="PASS" endtime="20170529 16:09:54.065" starttime="20170529 16:09:51.477"></status>
+</kw>
+<status status="PASS" endtime="20170529 16:09:54.065" critical="yes" starttime="20170529 16:09:48.811"></status>
+</test>
+<test id="s1-t2" name="Logout From Application">
+<kw name="Logout" library="keywords">
+<kw name="Wait Until Element Is Visible" library="Selenium2Library">
+<doc>Waits until element specified with `locator` is visible.</doc>
+<arguments>
+<arg>xpath=.//*[@id='user-menu']</arg>
+<arg>timeout=60</arg>
+</arguments>
+<status status="PASS" endtime="20170529 16:09:54.514" starttime="20170529 16:09:54.083"></status>
+</kw>
+<kw name="Click Button" library="Selenium2Library">
+<doc>Clicks a button identified by `locator`.</doc>
+<arguments>
+<arg>xpath=.//*[@id='user-menu']</arg>
+</arguments>
+<msg timestamp="20170529 16:09:54.515" level="INFO">Clicking button 'xpath=.//*[@id='user-menu']'.</msg>
+<status status="PASS" endtime="20170529 16:09:55.224" starttime="20170529 16:09:54.515"></status>
+</kw>
+<kw name="Wait Until Element Is Visible" library="Selenium2Library">
+<doc>Waits until element specified with `locator` is visible.</doc>
+<arguments>
+<arg>xpath=.//*[@id='user-and-info-nav']/div[1]/ul/li[1]/a</arg>
+<arg>timeout=60</arg>
+</arguments>
+<status status="PASS" endtime="20170529 16:09:55.326" starttime="20170529 16:09:55.225"></status>
+</kw>
+<kw name="Click Link" library="Selenium2Library">
+<doc>Clicks a link identified by locator.</doc>
+<arguments>
+<arg>xpath=.//*[@id='user-and-info-nav']/div[1]/ul/li[1]/a</arg>
+</arguments>
+<msg timestamp="20170529 16:09:55.327" level="INFO">Clicking link 'xpath=.//*[@id='user-and-info-nav']/div[1]/ul/li[1]/a'.</msg>
+<status status="PASS" endtime="20170529 16:09:56.131" starttime="20170529 16:09:55.326"></status>
+</kw>
+<kw name="Wait Until Element Is Visible" library="Selenium2Library">
+<doc>Waits until element specified with `locator` is visible.</doc>
+<arguments>
+<arg>xpath=.//*[@id='main-content']/form/button</arg>
+<arg>timeout=60</arg>
+</arguments>
+<status status="PASS" endtime="20170529 16:09:56.305" starttime="20170529 16:09:56.131"></status>
+</kw>
+<status status="PASS" endtime="20170529 16:09:56.305" starttime="20170529 16:09:54.075"></status>
+</kw>
+<status status="PASS" endtime="20170529 16:09:56.305" critical="yes" starttime="20170529 16:09:54.067"></status>
+</test>
+<kw type="teardown" name="Close Browser" library="Selenium2Library">
+<doc>Closes the current browser.</doc>
+<status status="PASS" endtime="20170529 16:09:56.368" starttime="20170529 16:09:56.307"></status>
+</kw>
+<status status="PASS" endtime="20170529 16:09:56.368" starttime="20170529 16:09:41.535"></status>
+</suite>
+<statistics>
+<total>
+<stat fail="0" pass="2">Critical Tests</stat>
+<stat fail="0" pass="2">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat fail="0" id="s1" name="Web-Tests" pass="2">Web-Tests</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
