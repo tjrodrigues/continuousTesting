@@ -12,7 +12,7 @@ pipeline {
 			}
 			node('WebGoatNode'){		
 				sh "echo hello2"                                                      
-			)
+			}
 		}
 	}
 }
