@@ -9,6 +9,7 @@ stage ('Build'){
 		} else {
 			bat(/"${mvnHome}\bin\mvn" clean install -DskipTests/)
 		}
+		junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: './webgoat-container/target/surefire-reports/*.xml’'
 	}
 }
 
@@ -23,19 +24,6 @@ stage('Static Analysis') {
 				bat(/"${mvnHome}\bin\mvn" $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN/)
 			}
 		}	
-	}
-}
-
-stage('Unit Test') { 
-	node('WebGoatNode'){
-		def mvnHome
-		mvnHome = tool 'M3'
-		if (isUnix()) {
-			sh "'${mvnHome}/bin/mvn' test"
-		} else {
-			bat(/"${mvnHome}\bin\mvn" test/)
-		}
-		junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: 'webgoat-container/target/surefire-reports/*.xml’'
 	}
 }
 
