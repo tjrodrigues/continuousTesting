@@ -5,9 +5,9 @@ stage ('Build'){
 		
 		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false, timeout: 30]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting.git']]])
 		if (isUnix()) {
-			sh "'${mvnHome}/bin/mvn' clean install"
+			sh "'${mvnHome}/bin/mvn' clean install -DskipTests"
 		} else {
-			bat(/"${mvnHome}\bin\mvn" clean install/)
+			bat(/"${mvnHome}\bin\mvn" clean install -DskipTests/)
 		}
 	}
 }
@@ -27,7 +27,14 @@ stage('Static Analysis') {
 }
 
 stage('Unit Test') { 
-        
+	node('WebGoatNode'){
+		if (isUnix()) {
+			sh "'${mvnHome}/bin/mvn' test"
+		} else {
+			bat(/"${mvnHome}\bin\mvn" test/)
+		}
+		junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: 'webgoat-container/target/surefire-reports/*.xml’'
+	}
 }
 
 stage('Test'){
