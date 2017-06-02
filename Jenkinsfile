@@ -1,4 +1,4 @@
-satge('Build'){
+stage('Build'){
 	sh 'echo build'
 }
 stage('Test'){
