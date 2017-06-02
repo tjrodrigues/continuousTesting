@@ -9,13 +9,13 @@ pipeline {
 			steps{
 				parallel (
 					"stream 1" : { 
-						node {                          
+							agent { label 'master'}                         
 							sh "sleep 20s" 
 							sh "echo hstream1"
 						} 
 					},
 					"stream 2" : { 
-						node  { 
+							agent  { label 'master'} 
 							sh "echo hello2"
 							sh "hashtag fail"                                                       
 						} 
