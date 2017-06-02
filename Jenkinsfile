@@ -5,8 +5,7 @@ pipeline {
 		def mvnHome = too 'M3'	
 	}
 
-	stages {
-		stage('Functional Tests') {
+
 			parallel (
 				"stream 1" : { 
 					node {                          
@@ -22,17 +21,4 @@ pipeline {
 					} 
 				}
 			)}
-
-		stage('Test') {
-			steps {
-				echo 'Testing..'
-			}
-		}
-
-		stage('Deploy') {
-			steps {
-				echo 'Deploying....'
-			}
-		}
-	}
 }
