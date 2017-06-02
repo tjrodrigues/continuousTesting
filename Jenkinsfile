@@ -9,7 +9,7 @@ stage ('Build & Unit Test'){
 		} else {
 			bat(/"${mvnHome}\bin\mvn" clean install/)
 		}
-		junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: './webgoat-container/target/surefire-reports/*.xml’'
+		junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: './webgoat-container/target/surefire-reports/*.xml'
 	}
 }
 
