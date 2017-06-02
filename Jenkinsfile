@@ -4,16 +4,27 @@ stage ('Build'){
 		mvnHome = tool 'M3'
 		
 		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false, timeout: 30]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting.git']]])
-		
-		withSonarQubeEnv('SonarQube') {
-			if (isUnix()) {
-				sh "'${mvnHome}/bin/mvn' clean install"
-			} else {
-				bat(/"${mvnHome}\bin\mvn" clean install/)
-			}
+		if (isUnix()) {
+			sh "'${mvnHome}/bin/mvn' clean install"
+		} else {
+			bat(/"${mvnHome}\bin\mvn" clean install/)
 		}
 	}
 }
+
+stage('Static Analysis') { 
+	withSonarQubeEnv('SonarQube') {
+	if (isUnix()) {
+		sh "'${mvnHome}/bin/mvn' $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN"
+	} else {
+		bat(/"${mvnHome}\bin\mvn" $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN/)
+	}
+}
+
+stage('Unit Test') { 
+        
+}
+
 stage('Test'){
 	node('master'){
 		sh "echo build"
