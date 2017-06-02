@@ -1,4 +1,4 @@
-testage('Build'){
+stage('Build'){
 	node('master'){
 		sh "echo build"
 	}
