@@ -1,5 +1,7 @@
 stage('Build'){
-	sh 'echo build'
+	node('master'){
+		sh "echo build"
+	}
 }
 stage('Test'){
 	parallel test01: {
