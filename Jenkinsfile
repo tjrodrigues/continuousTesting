@@ -46,7 +46,7 @@ stage('Deploy'){
 
 stage('Performance Tests'){
 	node('WebGoatNode'){
-		//Run jMeter tests
+		//Run jMeter tests  
 		bzt "./run-jmeter-test.yml"
 	}
 }
