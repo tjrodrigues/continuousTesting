@@ -10,6 +10,7 @@ stage ('Build & Unit Test'){
 			bat(/"${mvnHome}\bin\mvn" clean install/)
 		}
 		junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: 'webgoat-container/target/surefire-reports/*.xml'
+		perfReport modeThroughput:true,sourceDataFiles:'webgoat-container/target/surefire-reports/*.xml'
 	}
 }
 
