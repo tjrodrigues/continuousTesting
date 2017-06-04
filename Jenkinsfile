@@ -13,22 +13,22 @@ stage ('Build & Unit Test'){
 	}
 }
 
-stage('Static Analysis') { 
-	node('WebGoatNode'){
-		def mvnHome
-		mvnHome = tool 'M3'
-		withSonarQubeEnv('SonarQube') {
-			if (isUnix()) {
-				sh "'${mvnHome}/bin/mvn' $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN"
-			} else {
-				bat(/"${mvnHome}\bin\mvn" $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN/)
-			}
-		}	
-	}
-}
+//stage('Static Analysis') { 
+//	node('WebGoatNode'){
+//		def mvnHome
+//		mvnHome = tool 'M3'
+//		withSonarQubeEnv('SonarQube') {
+//			if (isUnix()) {
+//				sh "'${mvnHome}/bin/mvn' $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN"
+//			} else {
+//				bat(/"${mvnHome}\bin\mvn" $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN/)
+//			}
+//		}	
+//	}
+//}
 
 stage('Deploy'){
-	node('master'){
+	node('WebGoatNode'){
 		sh './clean-env.sh'
 		sh "./make-docker.sh"
 		sh './run-webgoat-docker-app-test.sh'
@@ -43,6 +43,15 @@ stage('Deploy'){
 		}
 	}
 }
+
+stage('Performance Tests'){
+	node('WebGoatNode'){
+		//Run jMeter tests
+		bzt "./run-jmeter-test.yml"
+	}
+}
+
+
 stage('Functinal Tests'){
 	parallel test01: {
 			node('master'){
