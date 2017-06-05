@@ -56,7 +56,7 @@ stage('Functional Tests') {
 		"stream 1" : { 
 			node ('SoapUiNode') {                          
 				checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false, timeout: 30]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting.git']]])
-				bat 'soapui-tests\run-test.bat'
+				bat 'soapui-tests/run-test.bat'
 				junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: 'soapui-tests/reports/*.xml'
 				perfReport modeThroughput:true,sourceDataFiles:'soapui-tests/reports/*.xml'
 			} 
