@@ -1,9 +1,10 @@
 *** Settings ***
-Resource           ../resources/variables.robot
+Resource           ../Resources/variables.robot
 *** Variables ***
+
 *** Keywords ***
 Set Selenium Settings
-    Set Selenium Implicit Wait      ${SELENIUM.WAIT}
+    Set Selenium Implicit Wait      ${SE LENIUM.WAIT}
     Set Selenium Timeout            ${SELENIUM.TIMEOUT}
     #Set Selenium Speed              ${SELENIUM.SPEED}
 
@@ -30,7 +31,7 @@ Login
 
 Logout
     Wait Until Element Is Visible    xpath=.//*[@id='user-menu']     timeout=60
-    click link  xpath=.//*[@id='user-menu']
+    Execute Javascript      document.getElementById("user-menu").click()
     Wait Until Element Is Visible    xpath=.//*[@id='user-and-info-nav']/div[1]/ul/li[1]/a     timeout=60
     click link  xpath=.//*[@id='user-and-info-nav']/div[1]/ul/li[1]/a
     Wait Until Element Is Visible    xpath=.//*[@id='main-content']/form/button     timeout=60

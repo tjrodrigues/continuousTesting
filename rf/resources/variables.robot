@@ -8,14 +8,17 @@ Library           OperatingSystem
 # External Libraries
 Library           Selenium2Library
 
+# External Libraries
+Library           Selenium2Library
+
 *** Variables ***
 # Application Settings
-${HOMEPAGE}                                    http://localhost:8181/WebGoat/login
+${HOMEPAGE}                                    http://192.168.0.234:8181/WebGoat/login
 ${BROWSER}                                     chrome
 ${DURATION}                                    30s
 ${RETRY}                                       2s
-${username}                                    robotfrmw
-${password}                                    robotfrmw
+${username}                                    robotfrmw10
+${password}                                    robotfrmw10
 ################################################ MetX Variables ########################################################
 ${SingInBtn}                                    xpath=.//*[@id='main-content']/form/button
 

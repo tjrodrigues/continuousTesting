@@ -1,5 +1,6 @@
 *** Settings ***
 Resource           ../resources/variables.robot
+Resource           ../Resources/keywords.robot
 Suite Setup     Setup User
 Suite Teardown  Close Browser
 
