@@ -3,12 +3,12 @@ stage ('Build & Unit Test'){
 		def mvnHome
 		mvnHome = tool 'M3'
 		sh './clean-env.sh'
-		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false, timeout: 30]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting.git']]])
-		if (isUnix()) {
-			sh "'${mvnHome}/bin/mvn' clean install"
-		} else {
-			bat(/"${mvnHome}\bin\mvn" clean install/)
-		}
+		//checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false, timeout: 30]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting.git']]])
+		//if (isUnix()) {
+		//	sh "'${mvnHome}/bin/mvn' clean install"
+		//} else {
+		//	bat(/"${mvnHome}\bin\mvn" clean install/)
+		//}
 		junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: 'webgoat-container/target/surefire-reports/*.xml'
 		perfReport modeThroughput:true,sourceDataFiles:'webgoat-container/target/surefire-reports/*.xml'
 	}
