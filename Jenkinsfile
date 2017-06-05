@@ -51,8 +51,36 @@ stage('Performance Tests'){
 	}
 }
 
+stage('Functional Tests') {
+	parallel (
+		"stream 1" : { 
+			node ('master') {                          
+				sh "sleep 20s" 
+				sh "echo hstream1"
+			} 
+		},
+		"stream 2" : { 
+			node ('master') { 
+				sh "pybot ./rf/tests/web-tests.robot"
+				step ([$class: 'RobotPublisher',
+				disableArchiveOutput: false,
+				logFileName: 'log.html',
+				onlyCritical: true,
+				otherFiles: '',
+				outputFileName: 'output.xml',
+				outputPath: '.',
+				passThreshold: 90,
+				reportFileName: 'robot-framework-report.html',
+				unstableThreshold: 100]);*/                                                      
+			} 
+		}
+	)
+}
 
-stage('Functinal Tests'){
+
+
+
+stage('Test Stage'){
 	parallel test01: {
 			node('master'){
 				sh "echo master"
