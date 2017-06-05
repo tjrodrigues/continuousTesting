@@ -71,9 +71,9 @@ stage('Functional Tests') {
 				otherFiles: '',
 				outputFileName: 'output.xml',
 				outputPath: '.',
-				passThreshold: 20,
-				reportFileName: 'robot-framework-report.html',
-				unstableThreshold: 10]);
+				passThreshold: 2,
+				reportFileName: 'report.html',
+				unstableThreshold: 1]);
 				sh 'echo hello!!' 
 			} 
 		}
