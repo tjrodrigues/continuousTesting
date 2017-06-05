@@ -2,7 +2,7 @@ stage ('Build & Unit Test'){
 	node('WebGoatNode'){
 		def mvnHome
 		mvnHome = tool 'M3'
-		//sh './clean-env.sh'
+		sh './clean-env.sh'
 		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false, timeout: 30]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting.git']]])
 //		if (isUnix()) {
 //			sh "'${mvnHome}/bin/mvn' clean install"
@@ -28,21 +28,21 @@ stage ('Build & Unit Test'){
 //	}
 //}
 
-//stage('Deploy'){
-//	node('WebGoatNode'){
-//		sh "./make-docker.sh"
-//		sh './run-webgoat-docker-app-test.sh'
-//		waitUntil {
-//			// Wait until app is up and running
-//			try {
-//				sh 'timeout 240 wget --retry-connrefused --tries=240 --waitretry=10 http://localhost:8181/WebGoat/login' // -o /dev/null
-//				return true
-//			} catch (exception) {
-//				return false
-//			}
-//		}
-//	}
-//}
+stage('Deploy'){
+	node('WebGoatNode'){
+		sh "./make-docker.sh"
+		sh './run-webgoat-docker-app-test.sh'
+		waitUntil {
+			// Wait until app is up and running
+			try {
+				sh 'timeout 240 wget --retry-connrefused --tries=240 --waitretry=10 http://localhost:8181/WebGoat/login' // -o /dev/null
+				return true
+			} catch (exception) {
+				return false
+			}
+		}
+	}
+}
 
 //stage('Performance Tests'){
 //	node('WebGoatNode'){
