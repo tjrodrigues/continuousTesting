@@ -84,7 +84,16 @@ stage('Functional Tests') {
 
 stage('Test Stage'){
 	node ('WebGoatNode') { 
-				sh "pybot ./rf/tests/web-tests.robot"
-				step <object of type hudson.plugins.robot.RobotPublisher> 
-			} 
+		sh "pybot ./rf/tests/web-tests.robot"
+		step ([$class: 'RobotPublisher',
+		disableArchiveOutput: false,
+		logFileName: 'log.html',
+		onlyCritical: false,
+		otherFiles: '',
+		outputFileName: 'output.xml',
+		outputPath: './',
+		passThreshold: 2,
+		reportFileName: 'report.html',
+		unstableThreshold: 1]);
+	} 
 }
