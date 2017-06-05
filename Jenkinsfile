@@ -55,7 +55,7 @@ stage('Functional Tests') {
 	parallel (
 		"stream 1" : { 
 			node ('SoapUiNode') {                          
-				bat(/soapui-tests/run-test.bat/)
+				bat 'soapui-tests/run-test.bat'
 				junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: 'soapui-tests/reports/*.xml'
 				perfReport modeThroughput:true,sourceDataFiles:'soapui-tests/reports/*.xml'
 			} 
