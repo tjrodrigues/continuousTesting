@@ -70,9 +70,9 @@ stage('Functional Tests') {
 				otherFiles: '',
 				outputFileName: 'output.xml',
 				outputPath: '.',
-				passThreshold: 90,
+				passThreshold: 20,
 				reportFileName: 'robot-framework-report.html',
-				unstableThreshold: 100]);                                                     
+				unstableThreshold: 10]);                                                     
 			} 
 		}
 	)
