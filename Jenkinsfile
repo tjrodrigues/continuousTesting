@@ -62,7 +62,28 @@ stage('Functional Tests') {
 			} 
 		},
 		"stream 2" : { 
-			node ('WebGoatNode') { 
+			//node ('WebGoatNode') { 
+			//	sh "pybot ./rf/tests/web-tests.robot"
+			//	step ([$class: 'RobotPublisher',
+			//	disableArchiveOutput: false,
+			//	logFileName: 'log.html',
+			//	onlyCritical: true,
+			//	otherFiles: '',
+			//	outputFileName: 'output.xml',
+			//	outputPath: '.',
+			//	passThreshold: 2,
+			//	reportFileName: 'report.html',
+			//	unstableThreshold: 1]);
+			//} 
+		}
+	)
+}
+
+
+
+
+stage('Test Stage'){
+	node ('WebGoatNode') { 
 				sh "pybot ./rf/tests/web-tests.robot"
 				step ([$class: 'RobotPublisher',
 				disableArchiveOutput: false,
@@ -76,22 +97,4 @@ stage('Functional Tests') {
 				unstableThreshold: 1]);
 				sh 'echo hello!!' 
 			} 
-		}
-	)
-}
-
-
-
-
-stage('Test Stage'){
-	parallel test01: {
-			node('master'){
-				sh "echo master"
-			}
-	},
-		test02: {
-			node('WebGoatNode'){
-				sh "echo webgoatnode"
-			}
-		}
 }
