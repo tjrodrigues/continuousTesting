@@ -7,4 +7,5 @@ then
 	sudo -S <<< "lnzadfc" docker ps -a | awk '{ print $1,$2 }' | grep  webgoat/webgoat-8.0 | awk '{ print $1}' | sudo xargs -I {} docker rm -f {} 
 fi
 
+sudo -S <<< "lnzadfc" rm -rf ./webgoat-server/target/*
 
