@@ -54,13 +54,14 @@ stage('Performance Tests'){
 stage('Functional Tests') {
 	parallel (
 		"stream 1" : { 
-			node ('master') {                          
-				sh "sleep 20s" 
-				sh "echo hstream1"
+			node ('SoapUiNode') {                          
+				sh "./soapui-tests/run-test.bat" 
+				junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: 'soapui-tests/reports/*.xml'
+				perfReport modeThroughput:true,sourceDataFiles:'wsoapui-tests/reports/*.xml'
 			} 
 		},
 		"stream 2" : { 
-			node ('master') { 
+			node ('WebGoatNode') { 
 				sh "pybot ./rf/tests/web-tests.robot"
 				step ([$class: 'RobotPublisher',
 				disableArchiveOutput: false,
