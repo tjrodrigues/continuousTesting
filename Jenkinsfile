@@ -63,7 +63,7 @@ stage('Functional Tests') {
 		},
 		"stream 2" : { 
 			node ('WebGoatNode') { 
-				sh "pybot ./rf/tests/web-tests.robot"
+				/*sh "pybot ./rf/tests/web-tests.robot"
 				step ([$class: 'RobotPublisher',
 				disableArchiveOutput: false,
 				logFileName: 'log.html',
@@ -73,7 +73,8 @@ stage('Functional Tests') {
 				outputPath: '.',
 				passThreshold: 20,
 				reportFileName: 'robot-framework-report.html',
-				unstableThreshold: 10]);                                                     
+				unstableThreshold: 10]);*/
+				sh 'echo hello!!' 
 			} 
 		}
 	)
