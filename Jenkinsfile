@@ -2,8 +2,8 @@ stage ('Build & Unit Test'){
 	node('WebGoatNode'){
 		def mvnHome
 		mvnHome = tool 'M3'
-		sh './clean-env.sh'
 		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false, timeout: 30]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting.git']]])
+		sh './clean-env.sh'
 		if (isUnix()) {
 			sh "'${mvnHome}/bin/mvn' clean install"
 		} else {
