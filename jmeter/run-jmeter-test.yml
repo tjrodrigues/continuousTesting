@@ -12,8 +12,16 @@ scenarios:
     script: test-jmeter.jmx
 
 reporting:
-- module: final-stats
 - module: console
+- module: final-stats
+  summary: true
+  percentiles: true
+  failed-labels: false   
+  test-duration: true
+  dump-csv: jmeter/perf-result-csv.csv
+- module: junit-xml
+  data-source: pass-fail
+  filename: jmeter/junit-result.xml
 
 settings:
   check-interval: 5s
