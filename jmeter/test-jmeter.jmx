@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jmeterTestPlan version="1.2" properties="3.2" jmeter="3.2 r1790748">
-  <hashTree>
+  <hashTree> 
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="WebGoat Performance Test Plan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
       <boolProp name="TestPlan.functional_mode">false</boolProp>
