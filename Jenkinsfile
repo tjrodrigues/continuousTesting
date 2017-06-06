@@ -4,29 +4,29 @@ stage ('Build & Unit Test'){
 		mvnHome = tool 'M3'
 		sh './clean-env.sh'
 		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false, timeout: 30]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting.git']]])
-//		if (isUnix()) {
-//			sh "'${mvnHome}/bin/mvn' clean install"
-//		} else {
-//			bat(/"${mvnHome}\bin\mvn" clean install/)
-//		}
-//		junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: 'webgoat-container/target/surefire-reports/*.xml'
-//		perfReport modeThroughput:true,sourceDataFiles:'webgoat-container/target/surefire-reports/*.xml'
+		if (isUnix()) {
+			sh "'${mvnHome}/bin/mvn' clean install"
+		} else {
+			bat(/"${mvnHome}\bin\mvn" clean install/)
+		}
+		junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: 'webgoat-container/target/surefire-reports/*.xml'
+		//perfReport modeThroughput:true,sourceDataFiles:'webgoat-container/target/surefire-reports/*.xml'
 	}
 }
 
-//stage('Static Analysis') { 
-//	node('WebGoatNode'){
-//		def mvnHome
-//		mvnHome = tool 'M3'
-//		withSonarQubeEnv('SonarQube') {
-//			if (isUnix()) {
-//				sh "'${mvnHome}/bin/mvn' $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN"
-//			} else {
-//				bat(/"${mvnHome}\bin\mvn" $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN/)
-//			}
-//		}	
-//	}
-//}
+stage('Static Analysis') { 
+	node('WebGoatNode'){
+		def mvnHome
+		mvnHome = tool 'M3'
+		withSonarQubeEnv('SonarQube') {
+			if (isUnix()) {
+				sh "'${mvnHome}/bin/mvn' $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN"
+			} else {
+				bat(/"${mvnHome}\bin\mvn" $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN/)
+			}
+		}	
+	}
+}
 
 stage('Deploy'){
 	node('WebGoatNode'){
@@ -42,56 +42,4 @@ stage('Deploy'){
 			}
 		}
 	}
-}
-
-//stage('Performance Tests'){
-//	node('WebGoatNode'){
-		//Run jMeter tests  
-//		bzt "./run-jmeter-test.yml"
-//	}
-//}
-
-stage('Functional Tests') {
-	parallel (
-		"stream 1" : { 
-			//node ('SoapUiNode') {                          
-				//checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false, timeout: 30]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting.git']]])
-				//bat 'soapui-tests/run-test.bat'
-				//junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: 'soapui-tests/reports/*.xml'
-				//perfReport modeThroughput:true,sourceDataFiles:'soapui-tests/reports/*.xml'
-			//} 
-		},
-		"stream 2" : { 
-			//node ('WebGoatNode') { 
-			//	sh "pybot ./rf/tests/web-tests.robot"
-			//	step ([$class: 'RobotPublisher',
-			//	disableArchiveOutput: false,
-			//	logFileName: 'log.html',
-			//	onlyCritical: true,
-			//	otherFiles: '',
-			//	outputFileName: 'output.xml',
-			//	outputPath: '.',
-			//	passThreshold: 2,
-			//	reportFileName: 'report.html',
-			//	unstableThreshold: 1]);
-			//} 
-		}
-	)
-}
-
-
-
-
-stage('Test Stage'){
-	node ('WebGoatNode') { 
-		sh "pybot ./rf/tests/web-tests.robot"
-		step([
-			$class : 'RobotPublisher',
-			outputPath : outputDirectory,
-			outputFileName : "*.xml",
-			disableArchiveOutput : false,
-			passThreshold : 100,
-			unstableThreshold: 95.0,
-			otherFiles : "*.png",])
-	} 
 }
