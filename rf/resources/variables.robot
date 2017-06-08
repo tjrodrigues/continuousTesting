@@ -13,7 +13,7 @@ Library           Selenium2Library
 
 *** Variables ***
 # Application Settings
-${HOMEPAGE}                                    http://192.168.0.234:8181/WebGoat/login
+${HOMEPAGE}                                    ${baseURL}
 ${BROWSER}                                     chrome
 ${DURATION}                                    30s
 ${RETRY}                                       2s
