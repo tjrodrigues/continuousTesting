@@ -43,3 +43,21 @@ stage('Deploy'){
 		}
 	}
 }
+
+stage('Functional Tests') {
+	parallel (
+		"stream 1" : { 
+			node ('WebGoatNode') {                          
+				sh "echo Executing Robot Framework tests..." 
+				build 'WebAppFunctionalAutomatedTests-GUI'
+			} 
+		},
+		"stream 2" : { 
+			node ('SoapUiNode') { 
+				sh "echo Executing SoapUI tests..." 
+				build 'WebAppFunctionalAutomatedTests-Services'                                                    
+			} 
+		}
+	)
+}
+
