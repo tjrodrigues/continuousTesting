@@ -9,6 +9,3 @@ sudo -S <<< "lnzadfc" ~/.bzt/jmeter-taurus/bin/jmeter -g ${jmeterLog} -o ${jenki
 
 
 
-
-
-
