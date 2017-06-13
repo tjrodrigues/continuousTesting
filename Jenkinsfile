@@ -53,19 +53,19 @@ stage('Deploy'){
 
 stage('Functional Tests') {
 	parallel (
-		"stream 1" : { 
+		"Robot Framework Web 1" : { 
 			node ('WebGoatNode') {                          
 				sh "echo Executing Robot Framework tests..." 
 				build 'WebAppFunctionalAutomatedTests-GUI'
 			} 
 		},
-		"stream 2" : { 
+		"SoapUI PRO" : { 
 			node ('SoapUiNode') { 
 				sh "echo Executing SoapUI tests..." 
 				build 'WebAppFunctionalAutomatedTests-Services'                                                    
 			} 
 		},
-		"stream 3" : { 
+		"Robot Framework Mobile" : { 
 			node ('WebGoatNode') {                          
 				sh "echo Executing Mobile tests..." 
 			} 
