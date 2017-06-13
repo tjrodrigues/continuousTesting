@@ -17,8 +17,8 @@ ${HOMEPAGE}                                    ${baseURL}
 ${BROWSER}                                     chrome
 ${DURATION}                                    30s
 ${RETRY}                                       2s
-${username}                                    robotfrmw10
-${password}                                    robotfrmw10
+${username}                                    robotfrmw
+${password}                                    robotfrmw
 ################################################ MetX Variables ########################################################
 ${SingInBtn}                                    xpath=.//*[@id='main-content']/form/button
 
