@@ -64,6 +64,11 @@ stage('Functional Tests') {
 				sh "echo Executing SoapUI tests..." 
 				build 'WebAppFunctionalAutomatedTests-Services'                                                    
 			} 
+		},
+		"stream 3" : { 
+			node ('WebGoatNode') {                          
+				sh "echo Executing Mobile tests..." 
+			} 
 		}
 	)
 }
