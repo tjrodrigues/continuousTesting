@@ -21,20 +21,20 @@ Register User
     input text  xpath=.//*[@id='matchingPassword']  ${password}
     select checkbox  xpath=.//*[@id='main-content']/fieldset/form/div[5]/div/div/label/input
     click button  xpath=.//*[@id='main-content']/fieldset/form/div[6]/div/button
-    Wait Until Element Is Visible   xpath=.//*[@id='show-hints-button']      timeout=60
+    Wait Until Element Is Visible   xpath=.//*[@id='show-hints-button']      timeout=15
 
 Login
     input text  xpath=.//*[@id='exampleInputEmail1']    ${username}
     input text  xpath=.//*[@id='exampleInputPassword1']     ${password}
     click button  xpath=.//*[@id='main-content']/form/button
-    Wait Until Element Is Visible   xpath=.//*[@id='show-hints-button']      timeout=60
+    Wait Until Element Is Visible   xpath=.//*[@id='show-hints-button']      timeout=15
 
 Logout
-    Wait Until Element Is Visible    xpath=.//*[@id='user-menu']     timeout=60
+    Wait Until Element Is Visible    xpath=.//*[@id='user-menu']     timeout=15
     Execute Javascript      document.getElementById("user-menu").click()
-    Wait Until Element Is Visible    xpath=.//*[@id='user-and-info-nav']/div[1]/ul/li[1]/a     timeout=60
+    Wait Until Element Is Visible    xpath=.//*[@id='user-and-info-nav']/div[1]/ul/li[1]/a     timeout=15
     click link  xpath=.//*[@id='user-and-info-nav']/div[1]/ul/li[1]/a
-    Wait Until Element Is Visible    xpath=.//*[@id='main-content']/form/button     timeout=60
+    Wait Until Element Is Visible    xpath=.//*[@id='main-content']/form/button     timeout=15
 
 Setup User
     Open Application
