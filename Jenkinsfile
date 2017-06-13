@@ -56,13 +56,13 @@ stage('Functional Tests') {
 		"Robot Framework Web 1" : { 
 			node ('WebGoatNode') {                          
 				sh "echo Executing Robot Framework tests..." 
-				build 'WebAppFunctionalAutomatedTests-GUI'
+				build( job : "WebAppFunctionalAutomatedTests-GUI", wait: false )
 			} 
 		},
 		"SoapUI PRO" : { 
 			node ('SoapUiNode') { 
 				sh "echo Executing SoapUI tests..." 
-				build 'WebAppFunctionalAutomatedTests-Services'                                                    
+				build( job : "WebAppFunctionalAutomatedTests-Services", wait: false )				
 			} 
 		},
 		"Robot Framework Mobile" : { 
