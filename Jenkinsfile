@@ -26,7 +26,11 @@ stage('Unit Test & Satic Analysis') {
 	parallel (
 		"Unit Test" : { 
 			node ('WebGoatNode') {                          
-				sh "echo Executing Robot Framework tests..." 
+				def mvnHome
+				mvnHome = tool 'M3'
+				sh "echo Executing Unit tests..." 
+				sh "'${mvnHome}/bin/mvn' test"
+				junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: 'webgoat-container/target/surefire-reports/*.xml'
 			} 
 		},
 		"SonarQube" : { 
