@@ -21,28 +21,18 @@ stage ('Build'){
 	}
 }
 
-stage ('Unit Test & Satic Analysis'){
-	def mvnHome
-	mvnHome = tool 'M3'
+
+stage('Unit Test & Satic Analysis') {
 	parallel (
-		"Unit Tests" : {
-			node ('WebGoatNode') {                         
-				sh "echo Executing Unit tests..." 
-				//sh "'${mvnHome}/bin/mvn' test"
-				//junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: 'webgoat-container/target/surefire-reports/*.xml'
+		"Unit Test" : { 
+			node ('WebGoatNode') {                          
+				sh "echo Executing Robot Framework tests..." 
 			} 
 		},
-		"Static Analysis" : { 
+		"SonarQube" : { 
 			node ('WebGoatNode') {                          
-				sh "echo Executing SonarQube Analysis..." 
-				//withSonarQubeEnv('SonarQube') {
-				//	if (isUnix()) {
-				//		sh "'${mvnHome}/bin/mvn' $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN"
-				//	} else {
-				//		bat(/"${mvnHome}\bin\mvn" $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN/)
-				//	}
-				//} 
-			}
+				sh "echo Executing Mobile tests..." 
+			} 
 		}
 	)
 }
