@@ -59,21 +59,31 @@ stage('Functional Tests') {
 				build job: 'WebAppFunctionalAutomatedTests-GUI', propagate: false
 			} 
 		},
-		"SoapUI PRO" : { 
-			node ('SoapUiNode') { 
-				sh "echo Executing SoapUI tests..." 
-				checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'soapui-tests/']]]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting']]])
-				bat 'soapui-tests\\run-test.bat'
-				step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: true, pattern: 'soapui-tests\\_test-reports\\*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]])
-				//build job: 'WebAppFunctionalAutomatedTests-Services', propagate: false 	
-			} 
-		},
+		//"SoapUI PRO" : { 
+		//	node ('SoapUiNode') { 
+		//		sh "echo Executing SoapUI tests..." 
+		//		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'soapui-tests/']]]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting']]])
+		//		bat 'soapui-tests\\run-test.bat'
+		//		step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: true, pattern: 'soapui-tests\\_test-reports\\*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]])
+		//		//build job: 'WebAppFunctionalAutomatedTests-Services', propagate: false 	
+		//	} 
+		//},
 		"Robot Framework Mobile" : { 
 			node ('WebGoatNode') {                          
 				sh "echo Executing Mobile tests..." 
 			} 
 		}
 	)
+}
+
+stage('SoapUI') {
+	node ('SoapUiNode') { 
+		//		sh "echo Executing SoapUI tests..." 
+		//		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'soapui-tests/']]]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting']]])
+		//		bat 'soapui-tests\\run-test.bat'
+		//		step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: true, pattern: 'soapui-tests\\_test-reports\\*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]])
+		build job: 'WebAppFunctionalAutomatedTests-Services', propagate: false 	
+	}  
 }
 
 stage('Performance Tests') {
