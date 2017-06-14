@@ -1,4 +1,4 @@
-stage ('Build & Unit Test & Satic Analysis'){
+stage ('Build'){
 	node('WebGoatNode'){
 		def mvnHome
 		mvnHome = tool 'M3'
@@ -9,16 +9,42 @@ stage ('Build & Unit Test & Satic Analysis'){
 		} else {
 			bat(/"${mvnHome}\bin\mvn" clean install/)
 		}
-		junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: 'webgoat-container/target/surefire-reports/*.xml'
+		//junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: 'webgoat-container/target/surefire-reports/*.xml'
 		//perfReport modeThroughput:true,sourceDataFiles:'webgoat-container/target/surefire-reports/*.xml'
-		withSonarQubeEnv('SonarQube') {
-			if (isUnix()) {
-				sh "'${mvnHome}/bin/mvn' $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN"
-			} else {
-				bat(/"${mvnHome}\bin\mvn" $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN/)
-			}
-		}	
+		//withSonarQubeEnv('SonarQube') {
+		//	if (isUnix()) {
+		//		sh "'${mvnHome}/bin/mvn' $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN"
+		//	} else {
+		//		bat(/"${mvnHome}\bin\mvn" $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN/)
+		//	}
+		//}	
 	}
+}
+
+stage ('Build & Unit Test & Satic Analysis'){
+	def mvnHome
+	mvnHome = tool 'M3'
+	parallel (
+		"Unit Tests" : { 
+			node ('WebGoatNode') {                          
+				sh "echo Executing Unit tests..." 
+				sh "'${mvnHome}/bin/mvn' test"
+				junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: 'webgoat-container/target/surefire-reports/*.xml'
+			} 
+		},
+		"Static Analysis" : { 
+			node ('WebGoatNode') {                          
+				sh "echo Executing SonarQube Analysis..." 
+				withSonarQubeEnv('SonarQube') {
+					if (isUnix()) {
+						sh "'${mvnHome}/bin/mvn' $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN"
+					} else {
+						bat(/"${mvnHome}\bin\mvn" $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN/)
+					}
+				} 
+			}
+		}
+	)
 }
 
 //stage('Static Analysis') { 
