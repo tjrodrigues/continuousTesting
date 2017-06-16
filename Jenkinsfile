@@ -3,11 +3,11 @@ stage ('Build'){
 		def mvnHome
 		mvnHome = tool 'M3'
 		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false, timeout: 30]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting.git']]])
-		//sh './clean-env.sh'
+		sh './clean-env.sh'
 		if (isUnix()) {
-			//sh "'${mvnHome}/bin/mvn' install"
+			sh "'${mvnHome}/bin/mvn' install"
 		} else {
-			//bat(/"${mvnHome}\bin\mvn" install/)
+			bat(/"${mvnHome}\bin\mvn" install/)
 		}
 		//junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: 'webgoat-container/target/surefire-reports/*.xml'
 		//perfReport modeThroughput:true,sourceDataFiles:'webgoat-container/target/surefire-reports/*.xml'
@@ -66,23 +66,22 @@ stage('Unit Test & Satic Analysis') {
 //	}
 //}
 
-stage('Functional Tests - UI') {
+stage('Functional Tests') {
 	parallel (
 		"Robot Framework Web 1" : { 
 			node ('WebGoatNode') {                          
 				sh "echo Executing Robot Framework tests..." 
-				//build job: 'WebAppFunctionalAutomatedTests-GUI', propagate: false
+				build job: 'WebAppFunctionalAutomatedTests-GUI', propagate: false
 			} 
 		},
-		//"SoapUI PRO" : { 
-		//	node ('SoapUiNode') { 
-		//		sh "echo Executing SoapUI tests..." 
-		//		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'soapui-tests/']]]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting']]])
-		//		bat 'soapui-tests\\run-test.bat'
-		//		step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: true, pattern: 'soapui-tests\\_test-reports\\*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]])
-		//		//build job: 'WebAppFunctionalAutomatedTests-Services', propagate: false 	
-		//	} 
-		//},
+		"SoapUI" : { 
+		node ('hostSlave') { 
+				checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'soapui-tests/']]]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting']]])
+				bat 'soapui-tests\\run-test-free-version.bat'
+				step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: true, pattern: 'soapui-tests\\_test-reports\\*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]])
+				//build job: 'WebAppFunctionalAutomatedTests-Services', propagate: false 	
+			} 
+		},
 		"Robot Framework Mobile" : { 
 			node ('WebGoatNode') {                          
 				sh "echo Executing Mobile tests..." 
@@ -91,28 +90,25 @@ stage('Functional Tests - UI') {
 	)
 }
 
-node ('hostSlave') { 
-	stage('Functional Tests - API') {
-	
+//node ('hostSlave') { 
+//	stage('Functional Tests - API') {
 				//sh "echo Executing SoapUI tests... "  
 				//checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'soapui-tests/']]]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting']]])
 				//bat 'soapui-tests\\run-test-free-version.bat', propagate: false
 				//bat(/soapui-tests\\run-test-free-version.bat/)
 				//build job: 'test', propagate: false
 				//step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: true, pattern: 'soapui-tests\\_test-reports\\*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]]) 	
-	}  
-}
+//	}  
+//}
 
 stage('Performance Tests') {
 	node ('WebGoatNode') {                          
-		sh "echo Executing jMeter tests..." 
-		//build 'PerformanceTests'
+		build 'PerformanceTests'
 	} 
 }
 
 stage('Security Tests - IBM') {
-	node ('hostSlave') {                          
-		//sh "echo Executing AppScan tests..." 
+	node ('hostSlave') {                           
 		build job:'AppScan-IBM'
 		//step([$class: 'AppScanStandardBuilder', additionalCommands: '', authScan: true, authScanPw: '', authScanRadio: true, authScanUser: '', generateReport: true, includeURLS: '', installation: 'AppScan', pathRecordedLoginSequence: 'appscan/ibm-test-site-appscan-login-sequence.login', policyFile: '', reportName: 'WebGoat', startingURL: 'https://demo.testfire.net', verbose: true])
 		
