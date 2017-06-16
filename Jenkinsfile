@@ -44,7 +44,7 @@ stage('Unit Test & Satic Analysis') {
 				//	} else {
 				//		bat(/"${mvnHome}\bin\mvn" $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN/)
 				//	}
-				} 
+				//} 
 			} 
 		}
 	)
