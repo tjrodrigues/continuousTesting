@@ -92,7 +92,7 @@ stage('Functional Tests') {
 }
 
 stage('SoapUI') {
-	node ('WebGoatNode') { 
+	node ('hostSlave') { 
 				sh "echo Executing SoapUI tests..." 
 				checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'soapui-tests/']]]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting']]])
 				bat 'soapui-tests\\run-test-free-version.bat', propagate: false
@@ -102,7 +102,7 @@ stage('SoapUI') {
 }
 
 stage('Performance Tests') {
-	node ('hostSlave') {                          
+	node ('WebGoatNode') {                          
 		sh "echo Executing jMeter tests..." 
 		build 'PerformanceTests'
 	} 
