@@ -3,11 +3,11 @@ stage ('Build'){
 		def mvnHome
 		mvnHome = tool 'M3'
 		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false, timeout: 30]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting.git']]])
-		sh './clean-env.sh'
+		//sh './clean-env.sh'
 		if (isUnix()) {
-			sh "'${mvnHome}/bin/mvn' install"
+			//sh "'${mvnHome}/bin/mvn' install"
 		} else {
-			bat(/"${mvnHome}\bin\mvn" install/)
+			//bat(/"${mvnHome}\bin\mvn" install/)
 		}
 		//junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: 'webgoat-container/target/surefire-reports/*.xml'
 		//perfReport modeThroughput:true,sourceDataFiles:'webgoat-container/target/surefire-reports/*.xml'
@@ -50,28 +50,28 @@ stage('Unit Test & Satic Analysis') {
 	)
 }
 
-stage('Deploy'){
-	node('WebGoatNode'){
-		sh "./make-docker.sh"
-		sh './run-webgoat-docker-app-test.sh'
-		waitUntil {
+//stage('Deploy'){
+//	node('WebGoatNode'){
+//		sh "./make-docker.sh"
+//		sh './run-webgoat-docker-app-test.sh'
+//		waitUntil {
 			// Wait until app is up and running
-			try {
-				sh 'timeout 240 wget --retry-connrefused --tries=240 --waitretry=10 http://localhost:8181/WebGoat/login' // -o /dev/null
-				return true
-			} catch (exception) {
-				return false
-			}
-		}
-	}
-}
+//			try {
+//				sh 'timeout 240 wget --retry-connrefused --tries=240 --waitretry=10 http://localhost:8181/WebGoat/login' // -o /dev/null
+//				return true
+//			} catch (exception) {
+//				return false
+//			}
+//		}
+//	}
+//}
 
 stage('Functional Tests - UI') {
 	parallel (
 		"Robot Framework Web 1" : { 
 			node ('WebGoatNode') {                          
 				sh "echo Executing Robot Framework tests..." 
-				build job: 'WebAppFunctionalAutomatedTests-GUI', propagate: false
+				//build job: 'WebAppFunctionalAutomatedTests-GUI', propagate: false
 			} 
 		},
 		//"SoapUI PRO" : { 
