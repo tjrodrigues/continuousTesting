@@ -110,7 +110,7 @@ stage('Performance Tests') {
 	} 
 }
 
-stage('Security Tests - AppScan') {
+stage('Security Tests - IBM') {
 	node ('hostSlave') {                          
 		sh "echo Executing AppScan tests..." 
 		//build job:'AppScan-IBM'
