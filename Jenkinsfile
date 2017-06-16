@@ -112,9 +112,9 @@ stage('Performance Tests') {
 
 stage('Security Tests - IBM') {
 	node ('hostSlave') {                          
-		sh "echo Executing AppScan tests..." 
-		//build job:'AppScan-IBM'
-		step([$class: 'AppScanStandardBuilder', additionalCommands: '', authScan: true, authScanPw: '', authScanRadio: true, authScanUser: '', generateReport: true, includeURLS: '', installation: 'AppScan', pathRecordedLoginSequence: 'appscan/ibm-test-site-appscan-login-sequence.login', policyFile: '', reportName: 'WebGoat', startingURL: 'https://demo.testfire.net', verbose: true])
+		//sh "echo Executing AppScan tests..." 
+		build job:'AppScan-IBM'
+		//step([$class: 'AppScanStandardBuilder', additionalCommands: '', authScan: true, authScanPw: '', authScanRadio: true, authScanUser: '', generateReport: true, includeURLS: '', installation: 'AppScan', pathRecordedLoginSequence: 'appscan/ibm-test-site-appscan-login-sequence.login', policyFile: '', reportName: 'WebGoat', startingURL: 'https://demo.testfire.net', verbose: true])
 		
 	} 
 }
