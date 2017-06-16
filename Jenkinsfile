@@ -38,31 +38,17 @@ stage('Unit Test & Satic Analysis') {
 				def mvnHome
 				mvnHome = tool 'M3'
 				sh "echo Executing SonarQube Analysis..." 
-				withSonarQubeEnv('SonarQube') {
-					if (isUnix()) {
-						sh "'${mvnHome}/bin/mvn' $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN"
-					} else {
-						bat(/"${mvnHome}\bin\mvn" $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN/)
-					}
+				//withSonarQubeEnv('SonarQube') {
+				//	if (isUnix()) {
+				//		sh "'${mvnHome}/bin/mvn' $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN"
+				//	} else {
+				//		bat(/"${mvnHome}\bin\mvn" $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN/)
+				//	}
 				} 
 			} 
 		}
 	)
 }
-
-//stage('Static Analysis') { 
-//	node('WebGoatNode'){
-//		def mvnHome
-//		mvnHome = tool 'M3'
-//		withSonarQubeEnv('SonarQube') {
-//			if (isUnix()) {
-//				sh "'${mvnHome}/bin/mvn' $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN"
-//			} else {
-//				bat(/"${mvnHome}\bin\mvn" $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN/)
-//			}
-//		}	
-//	}
-//}
 
 stage('Deploy'){
 	node('WebGoatNode'){
@@ -106,26 +92,26 @@ stage('Functional Tests') {
 }
 
 stage('SoapUI') {
-	node ('SoapUiNode') { 
+	node ('WebGoatNode') { 
 		//		sh "echo Executing SoapUI tests..." 
 		//		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'soapui-tests/']]]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting']]])
 		//		bat 'soapui-tests\\run-test.bat'
 		//		step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: true, pattern: 'soapui-tests\\_test-reports\\*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]])
-		build job: 'WebAppFunctionalAutomatedTests-Services', propagate: false 	
+		//build job: 'WebAppFunctionalAutomatedTests-Services', propagate: false 	
 	}  
 }
 
 stage('Performance Tests') {
-	node ('WebGoatNode') {                          
+	node ('hostSlave') {                          
 		sh "echo Executing jMeter tests..." 
 		build 'PerformanceTests'
 	} 
 }
 
 stage('Security Tests') {
-	node ('SoapUiNode') {                          
+	node ('hostSlave') {                          
 		sh "echo Executing AppScan tests..." 
-		build 'AppScan'
+		build 'AppScan-IBM'
 	} 
 }
 
