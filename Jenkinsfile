@@ -90,18 +90,13 @@ stage('Functional Tests - UI') {
 		}
 	)
 }
-
+node ('hostSlave') { 
 stage('Functional Tests - SoapUI') {
-	node ('hostSlave') { 
+	
 				sh "echo Executing SoapUI tests..." 
 				checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'soapui-tests/']]]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting']]])
 				//bat 'soapui-tests\\run-test-free-version.bat', propagate: false
-				
-				if (isUnix()) {
-					
-				} else {
-					bat(/soapui-tests\\run-test-free-version.bat/)
-				}
+				bat(/soapui-tests\\run-test-free-version.bat/)
 				//build job: 'WebAppFunctionalAutomatedTests-Services', propagate: false
 				step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: true, pattern: 'soapui-tests\\_test-reports\\*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]]) 	
 	}  
