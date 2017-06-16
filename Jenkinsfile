@@ -5,9 +5,9 @@ stage ('Build'){
 		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false, timeout: 30]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting.git']]])
 		sh './clean-env.sh'
 		if (isUnix()) {
-			sh "'${mvnHome}/bin/mvn' clean install"
+			sh "'${mvnHome}/bin/mvn' install"
 		} else {
-			bat(/"${mvnHome}\bin\mvn" clean install/)
+			bat(/"${mvnHome}\bin\mvn" install/)
 		}
 		//junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: 'webgoat-container/target/surefire-reports/*.xml'
 		//perfReport modeThroughput:true,sourceDataFiles:'webgoat-container/target/surefire-reports/*.xml'
@@ -100,9 +100,9 @@ stage('Functional Tests - SoapUI') {
 				if (isUnix()) {
 					
 				} else {
-					bat(/"soapui-tests\\run-test-free-version.bat"/)
+					bat(/soapui-tests\\run-test-free-version.bat/)
 				}
-				build job: 'WebAppFunctionalAutomatedTests-Services', propagate: false
+				//build job: 'WebAppFunctionalAutomatedTests-Services', propagate: false
 				step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: true, pattern: 'soapui-tests\\_test-reports\\*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]]) 	
 	}  
 }
