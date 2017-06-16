@@ -48,7 +48,7 @@
   <con:entry key="System Properties" value=""/>
   <con:entry key="Domain" value=""/>
   <con:entry key="Coverage Report" value="false"/>
-  <con:entry key="Export JUnit Results" value="false"/>
+  <con:entry key="Export JUnit Results" value="true"/>
   <con:entry key="Export JUnit Results with test properties" value="true"/>
   <con:entry key="Open Report" value="false"/>
   <con:entry key="Project Properties" value=""/>
