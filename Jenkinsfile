@@ -99,7 +99,7 @@ stage('Performance Tests') {
 stage('Security Tests - IBM') {
 	node ('hostSlave') {                           
 		//step([$class: 'CopyArtifact', filter: '*.*', fingerprintArtifacts: true, projectName: 'WebAppFunctionalAutomatedTests-GUI', selector: [$class: 'StatusBuildSelector', stable: false], target: 'rf-artifacts'])
-		step([$class: 'CopyArtifact', filter: '*.xml', fingerprintArtifacts: true, projectName: 'WebAppFunctionalAutomatedTests', selector: [$class: 'WorkspaceSelector'], target: 'rf-artifacts'])
+		step([$class: 'CopyArtifact', filter: '*.xml', fingerprintArtifacts: true, projectName: 'WebAppFunctionalAutomatedTests-GUI', selector: [$class: 'WorkspaceSelector'], target: 'rf-artifacts'])
 		//build job:'AppScan-IBM'
 		//step([$class: 'AppScanStandardBuilder', additionalCommands: '', authScan: true, authScanPw: '', authScanRadio: true, authScanUser: '', generateReport: true, includeURLS: '', installation: 'AppScan', pathRecordedLoginSequence: 'appscan/ibm-test-site-appscan-login-sequence.login', policyFile: '', reportName: 'WebGoat', startingURL: 'https://demo.testfire.net', verbose: true])
 		
