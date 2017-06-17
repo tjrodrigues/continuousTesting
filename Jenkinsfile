@@ -109,7 +109,7 @@ stage('Security Tests - IBM') {
 
 stage('Procesing test results') {
 	node ('master') {                           
-		step([$class: 'CopyArtifact', filter: 'rf/_test_rports/*/*.*', fingerprintArtifacts: true, projectName: 'WebAppFunctionalAutomatedTests-GUI', selector: [$class: 'WorkspaceSelector']])
+		step([$class: 'CopyArtifact', filter: 'rf/_test_rports/*', fingerprintArtifacts: true, projectName: 'WebAppFunctionalAutomatedTests-GUI', selector: [$class: 'WorkspaceSelector']])
 	} 
 }
 
