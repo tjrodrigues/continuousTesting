@@ -3,11 +3,11 @@ stage ('Build'){
 		def mvnHome
 		mvnHome = tool 'M3'
 		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false, timeout: 30]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting.git']]])
-		sh './clean-env.sh'
+		//sh './clean-env.sh'
 		if (isUnix()) {
-			sh "'${mvnHome}/bin/mvn' install"
+			//sh "'${mvnHome}/bin/mvn' install"
 		} else {
-			bat(/"${mvnHome}\bin\mvn" install/)
+			//bat(/"${mvnHome}\bin\mvn" install/)
 		}
 		//junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: 'webgoat-container/target/surefire-reports/*.xml'
 		//perfReport modeThroughput:true,sourceDataFiles:'webgoat-container/target/surefire-reports/*.xml'
@@ -29,7 +29,7 @@ stage('Unit Test & Satic Analysis') {
 				mvnHome = tool 'M3'
 				sh "echo Executing Unit tests..." 
 				sh "'${mvnHome}/bin/mvn' test"
-				junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: 'webgoat-container/target/surefire-reports/*.xml'
+				//junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: 'webgoat-container/target/surefire-reports/*.xml'
 			} 
 		},
 		"SonarQube" : { 
@@ -49,21 +49,21 @@ stage('Unit Test & Satic Analysis') {
 	)
 }
 
-stage('Deploy'){
-	node('WebGoatNode'){
-		sh "./make-docker.sh"
-		sh './run-webgoat-docker-app-test.sh'
-		waitUntil {
+//stage('Deploy'){
+//	node('WebGoatNode'){
+//		sh "./make-docker.sh"
+//		sh './run-webgoat-docker-app-test.sh'
+//		waitUntil {
 			// Wait until app is up and running
-		try {
-				sh 'timeout 240 wget --retry-connrefused --tries=240 --waitretry=10 http://localhost:8181/WebGoat/login' // -o /dev/null
-				return true
-			} catch (exception) {
-				return false
-			}
-		}
-	}
-}
+//		try {
+//				sh 'timeout 240 wget --retry-connrefused --tries=240 --waitretry=10 http://localhost:8181/WebGoat/login' // -o /dev/null
+//				return true
+//			} catch (exception) {
+//				return false
+//			}
+//		}
+//	}
+//}
 
 stage('Functional Tests') {
 	parallel (
@@ -98,7 +98,7 @@ stage('Performance Tests') {
 
 stage('Security Tests - IBM') {
 	node ('hostSlave') {                           
-		step([$class: 'CopyArtifact', filter: '*.xml', fingerprintArtifacts: true, projectName: 'WebAppFunctionalAutomatedTests-GUI', selector: [$class: 'StatusBuildSelector', stable: false], target: 'rf-artifacts'])
+		step([$class: 'CopyArtifact', filter: '*.*', fingerprintArtifacts: true, projectName: 'WebAppFunctionalAutomatedTests-GUI', selector: [$class: 'StatusBuildSelector', stable: false], target: 'rf-artifacts'])
 		//build job:'AppScan-IBM'
 		//step([$class: 'AppScanStandardBuilder', additionalCommands: '', authScan: true, authScanPw: '', authScanRadio: true, authScanUser: '', generateReport: true, includeURLS: '', installation: 'AppScan', pathRecordedLoginSequence: 'appscan/ibm-test-site-appscan-login-sequence.login', policyFile: '', reportName: 'WebGoat', startingURL: 'https://demo.testfire.net', verbose: true])
 		
