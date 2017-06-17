@@ -109,8 +109,10 @@ stage('Security Tests - IBM') {
 
 stage('Procesing test results') {
 	node ('master') {                           
+		// Copy RF reports to the pipeline workspace
 		step([$class: 'CopyArtifact', filter: 'rf/_test-reports/**/*.*', fingerprintArtifacts: true, projectName: 'WebAppFunctionalAutomatedTests-GUI', selector: [$class: 'LastCompletedBuildSelector']])
-
+		// Copy Soapui reports to the pipeline workspace
+		step([$class: 'CopyArtifact', filter: 'soapui-tests/_test-reports/*.*', fingerprintArtifacts: true, projectName: 'WebAppFunctionalAutomatedTests-Services-FreeVersion', selector: [$class: 'LastCompletedBuildSelector']])
 	} 
 }
 
