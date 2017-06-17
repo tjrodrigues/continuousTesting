@@ -70,7 +70,7 @@ stage('Functional Tests') {
 		"Robot Framework Web" : { 
 			node ('WebGoatNode') {                          
 				sh "echo Executing Robot Framework tests..." 
-				//build job: 'WebAppFunctionalAutomatedTests-GUI', propagate: false
+				build job: 'WebAppFunctionalAutomatedTests-GUI', propagate: false
 				//step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: true, pattern: 'soapui-tests\\_test-reports\\*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]])	
 				
 			} 
@@ -79,7 +79,7 @@ stage('Functional Tests') {
 		node ('hostSlave') { 
 				checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'soapui-tests/']]]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting']]])
 				//bat 'soapui-tests\\run-test-free-version.bat', propagate: false
-				//build job: 'WebAppFunctionalAutomatedTests-Services-FreeVersion', propagate: false 
+				build job: 'WebAppFunctionalAutomatedTests-Services-FreeVersion', propagate: false 
 				//step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: true, pattern: 'soapui-tests\\_test-reports\\*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]])	
 			} 
 		},
