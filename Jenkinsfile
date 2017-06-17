@@ -70,7 +70,7 @@ stage('Functional Tests') {
 		"Robot Framework Web" : { 
 			node ('WebGoatNode') {                          
 				sh "echo Executing Robot Framework tests..." 
-				build job: 'WebAppFunctionalAutomatedTests-GUI', propagate: false
+				//build job: 'WebAppFunctionalAutomatedTests-GUI', propagate: false
 				//step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: true, pattern: 'soapui-tests\\_test-reports\\*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]])	
 				
 			} 
@@ -79,7 +79,7 @@ stage('Functional Tests') {
 		node ('hostSlave') { 
 				checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'soapui-tests/']]]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting']]])
 				//bat 'soapui-tests\\run-test-free-version.bat', propagate: false
-				build job: 'WebAppFunctionalAutomatedTests-Services-FreeVersion', propagate: false 
+				//build job: 'WebAppFunctionalAutomatedTests-Services-FreeVersion', propagate: false 
 				//step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: true, pattern: 'soapui-tests\\_test-reports\\*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]])	
 			} 
 		},
@@ -111,10 +111,10 @@ stage('Procesing test results') {
 	node ('master') {                           
 		// Copy RF reports to the pipeline workspace
 		step([$class: 'CopyArtifact', filter: 'rf/_test-reports/**/*.*', fingerprintArtifacts: true, projectName: 'WebAppFunctionalAutomatedTests-GUI', selector: [$class: 'LastCompletedBuildSelector']])
-		step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: true, pattern: 'rf/_test-reports/**/*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]])	
+		step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: false, pattern: 'rf/_test-reports/**/*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]])	
 		// Copy Soapui reports to the pipeline workspace
 		step([$class: 'CopyArtifact', filter: 'soapui-tests/_test-reports/*.xml', fingerprintArtifacts: true, projectName: 'WebAppFunctionalAutomatedTests-Services-FreeVersion', selector: [$class: 'LastCompletedBuildSelector']])
-		step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: true, pattern: 'soapui-tests/_test-reports/*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]])
+		step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: false, pattern: 'soapui-tests/_test-reports/*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]])
 	} 
 }
 
