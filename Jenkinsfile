@@ -24,7 +24,7 @@ stage ('Build'){
 stage('Unit Test & Satic Analysis') {
 	parallel (
 		"Unit Test" : { 
-			node ('WebGoatNode') {                          
+			node ('ProjectBuildEnv') {                          
 				def mvnHome
 				mvnHome = tool 'M3'
 				sh "echo Executing Unit tests..." 
@@ -33,7 +33,7 @@ stage('Unit Test & Satic Analysis') {
 			} 
 		},
 		"SonarQube" : { 
-			node ('WebGoatNode') {   
+			node ('ProjectBuildEnv') {   
 				def mvnHome
 				mvnHome = tool 'M3'
 				sh "echo Executing SonarQube Analysis..." 
@@ -49,8 +49,8 @@ stage('Unit Test & Satic Analysis') {
 	)
 }
 
-//stage('Deploy'){
-//	node('WebGoatNode'){
+//stage('Packaging & Deploy (Test Env.)'){
+//	node('ProjectBuildEnv'){
 //		sh "./make-docker.sh"
 //		sh './run-webgoat-docker-app-test.sh'
 //		waitUntil {
