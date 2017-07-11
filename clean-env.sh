@@ -9,5 +9,5 @@ fi
 
 sudo -S <<< "cd" rm -rf ./webgoat-server/target/*
 
-sudo -s <<< "cd" docker ps --filter status=dead --filter status=exited -aq | sudo -S <<< "cd" xargs -r docker rm -v
+sudo -S <<< "cd" docker ps --filter status=dead --filter status=exited -aq | sudo -S <<< "cd" xargs -r docker rm -v
 
