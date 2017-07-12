@@ -5,7 +5,7 @@ stage ('Build'){
 		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false, timeout: 30]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting.git']]])
 		sh './clean-env.sh'
 		if (isUnix()) {
-			//sh "'${mvnHome}/bin/mvn' install"
+			sh "'${mvnHome}/bin/mvn' install"
 		} else {
 			//bat(/"${mvnHome}\bin\mvn" install/)
 		}
