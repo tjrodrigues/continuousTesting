@@ -69,7 +69,7 @@ stage('Packaging & Deploy (Test Env.)'){
 stage('Functional Tests') {
 	parallel (
 		"Robot Framework Web" : { 
-			node ('WebGoatNode') {                          
+			node ('ProjectTestSupport') {                          
 				sh "echo Executing Robot Framework tests..." 
 				//build job: 'WebAppFunctionalAutomatedTests-GUI', propagate: false
 				//step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: true, pattern: 'soapui-tests\\_test-reports\\*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]])	
@@ -77,7 +77,7 @@ stage('Functional Tests') {
 			} 
 		},
 		"SoapUI API" : { 
-		node ('hostSlave') { 
+		node ('ProjectTestSupport') { 
 				checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'soapui-tests/']]]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting']]])
 				//bat 'soapui-tests\\run-test-free-version.bat', propagate: false
 				//build job: 'WebAppFunctionalAutomatedTests-Services-FreeVersion', propagate: false 
@@ -93,13 +93,13 @@ stage('Functional Tests') {
 }
 
 stage('Performance Tests') {
-	node ('WebGoatNode') {                          
+	node ('ProjectTestSupport') {                          
 		//build 'PerformanceTests'
 	} 
 }
 
 stage('Security Tests - IBM') {
-	node ('hostSlave') {                           
+	node ('ProjectTestSupport') {                           
 		//step([$class: 'CopyArtifact', filter: '*.*', fingerprintArtifacts: true, projectName: 'WebAppFunctionalAutomatedTests-GUI', selector: [$class: 'StatusBuildSelector', stable: false], target: 'rf-artifacts'])
 		//step([$class: 'CopyArtifact', filter: '*.xml', fingerprintArtifacts: true, projectName: 'WebAppFunctionalAutomatedTests-GUI', selector: [$class: 'WorkspaceSelector'], target: 'rf-artifacts'])
 		//build job:'AppScan-IBM'
