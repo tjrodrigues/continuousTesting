@@ -6,6 +6,8 @@ SET soapuiProject="%WORKSPACE%\soapui-tests\WebGoat-soapui-project-free-version.
 
 REM Command line to run the specified tests
 %soapuiHome%\bin\testrunner.bat -s"TestSuite 1" -r -a -j -J -f%WORKSPACE%\soapui-tests\_test-reports\ %soapuiProject%
+echo %errorlevel%
+
 
 
 
