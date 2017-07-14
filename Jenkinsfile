@@ -28,8 +28,8 @@ stage('Unit Test & Satic Analysis') {
 				def mvnHome
 				mvnHome = tool 'M3'
 				sh "echo Executing Unit tests..." 
-				sh "'${mvnHome}/bin/mvn' test"
-				junit 'webgoat-container/target/surefire-reports/*.xml'
+				//sh "'${mvnHome}/bin/mvn' test"
+				//junit 'webgoat-container/target/surefire-reports/*.xml'
 				//junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: 'webgoat-container/target/surefire-reports/*.xml'
 			} 
 		},
@@ -80,12 +80,12 @@ stage('Functional Tests') {
 		node ('ProjectTestSupport') { 
 				checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'soapui-tests/']]]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting']]])
 				//bat 'soapui-tests\\run-test-free-version.bat', propagate: false
-				//build job: 'WebAppFunctionalAutomatedTests-Services-FreeVersion', propagate: false 
+				build job: 'API-AUtTests', propagate: false 
 				//step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: true, pattern: 'soapui-tests\\_test-reports\\*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]])	
 			} 
 		},
 		"Robot Framework Mobile" : { 
-			node ('WebGoatNode') {                          
+			node ('ProjectTestSupport') {                          
 				sh "echo Executing Mobile tests..." 
 			} 
 		}
