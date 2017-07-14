@@ -1,6 +1,5 @@
 modules:
   jmeter:
-    path: ~/.bzt/jmeter-taurus/bin/jmeter
     download-link: http://mirrors.fe.up.pt/pub/apache//jmeter/binaries/apache-jmeter-3.2.zip
     version: 3.2
 
