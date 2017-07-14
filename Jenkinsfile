@@ -2,10 +2,10 @@ stage ('Build'){
 	node('ProjectBuildEnv'){
 		def mvnHome
 		mvnHome = tool 'M3'
-		//checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false, timeout: 30]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting.git']]])
-		//sh './clean-env.sh'
+		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false, timeout: 30]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting.git']]])
+		sh './clean-env.sh'
 		if (isUnix()) {
-		//	sh "'${mvnHome}/bin/mvn' install"
+			sh "'${mvnHome}/bin/mvn' clean install"
 		} else {
 			//bat(/"${mvnHome}\bin\mvn" install/)
 		}
@@ -50,21 +50,21 @@ stage('Unit Test & Satic Analysis') {
 	)
 }
 
-//stage('Packaging & Deploy (Test Env.)'){
-//	node('ProjectBuildEnv'){
-//		sh "./make-docker.sh"
-//		sh './run-webgoat-docker-app-test.sh'
-//		waitUntil {
-//			// Wait until app is up and running
-//		try {
-//				sh 'timeout 240 wget --retry-connrefused --tries=240 --waitretry=10 http://localhost:8181/WebGoat/login' // -o /dev/null
-//				return true
-//			} catch (exception) {
-//				return false
-//			}
-//		}
-//	}
-//}
+stage('Packaging & Deploy (Test Env.)'){
+	node('ProjectBuildEnv'){
+		sh "./make-docker.sh"
+		sh './run-webgoat-docker-app-test.sh'
+		waitUntil {
+			// Wait until app is up and running
+		try {
+				sh 'timeout 240 wget --retry-connrefused --tries=240 --waitretry=10 http://localhost:8181/WebGoat/login' // -o /dev/null
+				return true
+			} catch (exception) {
+				return false
+			}
+		}
+	}
+}
 
 stage('Functional Tests') {
 	parallel (
