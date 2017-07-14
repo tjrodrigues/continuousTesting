@@ -9,7 +9,7 @@ execution:
 
 scenarios:
   simple:
-    script: jmeter/test-jmeter.jmx
+    script: test-jmeter.jmx
 
 reporting:
 - module: console
