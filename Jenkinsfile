@@ -2,10 +2,10 @@ stage ('Build'){
 	node('ProjectBuildEnv'){
 		def mvnHome
 		mvnHome = tool 'M3'
-		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false, timeout: 30]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting.git']]])
-		sh './clean-env.sh'
+		//checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false, timeout: 30]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting.git']]])
+		//sh './clean-env.sh'
 		if (isUnix()) {
-			sh "'${mvnHome}/bin/mvn' clean install"
+			//sh "'${mvnHome}/bin/mvn' clean install"
 		} else {
 			//bat(/"${mvnHome}\bin\mvn" install/)
 		}
@@ -28,8 +28,8 @@ stage('Unit Test & Satic Analysis') {
 				def mvnHome
 				mvnHome = tool 'M3'
 				sh "echo Executing Unit tests..." 
-				//sh "'${mvnHome}/bin/mvn' test"
-				//junit 'webgoat-container/target/surefire-reports/*.xml'
+				sh "'${mvnHome}/bin/mvn' test"
+				junit 'webgoat-container/target/surefire-reports/*.xml'
 				//junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: 'webgoat-container/target/surefire-reports/*.xml'
 			} 
 		},
@@ -50,21 +50,21 @@ stage('Unit Test & Satic Analysis') {
 	)
 }
 
-stage('Packaging & Deploy (Test Env.)'){
-	node('ProjectBuildEnv'){
-		sh "./make-docker.sh"
-		sh './run-webgoat-docker-app-test.sh'
-		waitUntil {
+//stage('Packaging & Deploy (Test Env.)'){
+//	node('ProjectBuildEnv'){
+//		sh "./make-docker.sh"
+//		sh './run-webgoat-docker-app-test.sh'
+//		waitUntil {
 			// Wait until app is up and running
-		try {
-				sh 'timeout 240 wget --retry-connrefused --tries=240 --waitretry=10 http://localhost:8181/WebGoat/login' // -o /dev/null
-				return true
-			} catch (exception) {
-				return false
-			}
-		}
-	}
-}
+//		try {
+//				sh 'timeout 240 wget --retry-connrefused --tries=240 --waitretry=10 http://localhost:8181/WebGoat/login' // -o /dev/null
+//				return true
+//			} catch (exception) {
+//				return false
+//			}
+//		}
+//	}
+//}
 
 stage('Functional Tests') {
 	parallel (
@@ -72,16 +72,13 @@ stage('Functional Tests') {
 			node ('ProjectTestSupport') {                          
 				sh "echo Executing Robot Framework tests..." 
 				build job: 'Web-AutTests', propagate: false
-				//step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: true, pattern: 'soapui-tests\\_test-reports\\*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]])	
 				
 			} 
 		},
 		"SoapUI API" : { 
 		node ('ProjectTestSupport') { 
 				checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'soapui-tests/']]]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting']]])
-				//bat 'soapui-tests\\run-test-free-version.bat', propagate: false
 				build job: 'API-AutTests', propagate: false 
-				//step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: true, pattern: 'soapui-tests\\_test-reports\\*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]])	
 			} 
 		},
 		"Robot Framework Mobile" : { 
@@ -100,10 +97,7 @@ stage('Performance Tests') {
 
 stage('Security Tests - IBM') {
 	node ('ProjectTestSupport') {                           
-		//step([$class: 'CopyArtifact', filter: '*.*', fingerprintArtifacts: true, projectName: 'WebAppFunctionalAutomatedTests-GUI', selector: [$class: 'StatusBuildSelector', stable: false], target: 'rf-artifacts'])
-		//step([$class: 'CopyArtifact', filter: '*.xml', fingerprintArtifacts: true, projectName: 'WebAppFunctionalAutomatedTests-GUI', selector: [$class: 'WorkspaceSelector'], target: 'rf-artifacts'])
-		//build job:'AppScan-IBM'
-		//step([$class: 'AppScanStandardBuilder', additionalCommands: '', authScan: true, authScanPw: '', authScanRadio: true, authScanUser: '', generateReport: true, includeURLS: '', installation: 'AppScan', pathRecordedLoginSequence: 'appscan/ibm-test-site-appscan-login-sequence.login', policyFile: '', reportName: 'WebGoat', startingURL: 'https://demo.testfire.net', verbose: true])
+		build job:'AppScan-IBM'
 		
 	} 
 }
@@ -111,11 +105,11 @@ stage('Security Tests - IBM') {
 stage('Procesing test results') {
 	node ('master') {                           
 		// Copy RF reports to the pipeline workspace
-		step([$class: 'CopyArtifact', filter: 'rf/_test-reports/**/*.*', fingerprintArtifacts: true, projectName: 'WebAppFunctionalAutomatedTests-GUI', selector: [$class: 'LastCompletedBuildSelector']])
-		step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: false, pattern: 'rf/_test-reports/**/*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]])	
+		//step([$class: 'CopyArtifact', filter: 'rf/_test-reports/**/*.*', fingerprintArtifacts: true, projectName: 'WebAppFunctionalAutomatedTests-GUI', selector: [$class: 'LastCompletedBuildSelector']])
+		//step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: false, pattern: 'rf/_test-reports/**/*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]])	
 		// Copy Soapui reports to the pipeline workspace
-		step([$class: 'CopyArtifact', filter: 'soapui-tests/_test-reports/*.xml', fingerprintArtifacts: true, projectName: 'WebAppFunctionalAutomatedTests-Services-FreeVersion', selector: [$class: 'LastCompletedBuildSelector']])
-		step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: false, pattern: 'soapui-tests/_test-reports/*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]])
+		//step([$class: 'CopyArtifact', filter: 'soapui-tests/_test-reports/*.xml', fingerprintArtifacts: true, projectName: 'WebAppFunctionalAutomatedTests-Services-FreeVersion', selector: [$class: 'LastCompletedBuildSelector']])
+		//step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: false, pattern: 'soapui-tests/_test-reports/*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]])
 	} 
 }
 
