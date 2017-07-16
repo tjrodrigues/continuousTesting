@@ -70,7 +70,7 @@ stage('Functional Tests') {
 	parallel (
 		"Robot Framework Web" : { 
 			node ('ProjectTestSupport') {                          
-				build job: 'Web-AutTests', propagate: false
+				//build job: 'Web-AutTests', propagate: false
 			} 
 		},
 		"SoapUI API" : { 
@@ -103,7 +103,7 @@ stage('Procesing test results') {
 	node ('master') {                           
 		step([
 			$class           : 'hudson.plugins.robot.RobotPublisher',
-			outputPath       : '/var/jenkins_home/workspace/ContinuousTesting/WebGoatProjectPipeline/Web-AutTests/rf/_test-reports/**/*.*',
+			outputPath       : 'Web-AutTests/rf/_test-reports/**/*.*',
 			passThreshold    : 100,
 			unstableThreshold: 100,
 			otherFiles       : '',
