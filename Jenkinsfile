@@ -103,7 +103,7 @@ stage('Procesing test results') {
 	node ('master') {                           
 		step([
 			$class           : 'hudson.plugins.robot.RobotPublisher',
-			outputPath       : 'Web-AutTests/rf/_test-reports/**/*.*',
+			outputPath       : '/var/jenkins_home/workspace/ContinuousTesting/WebGoatProjectPipeline/Web-AutTests/rf/_test-reports/**/*.*',
 			passThreshold    : 100,
 			unstableThreshold: 100,
 			otherFiles       : '',
