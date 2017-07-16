@@ -24,6 +24,6 @@ ${SingInBtn}                                    xpath=.//*[@id='main-content']/f
 
 ###############################     Selenium Settings  #################################################################
 ${SELENIUM.WAIT}                               2s
-${SELENIUM.TIMEOUT}                            20 seconds
+${SELENIUM.TIMEOUT}                            10 seconds
 ${SELENIUM.SPEED}                              2s
 *** Keywords ***
