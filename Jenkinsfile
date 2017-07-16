@@ -70,21 +70,7 @@ stage('Functional Tests') {
 	parallel (
 		"Robot Framework Web" : { 
 			node ('ProjectTestSupport') {                          
-				def rfBuildResult = build job: 'Web-AutTests', propagate: false
-				def rfEnvVariables = rfBuildResult.getBuildVariables();
-				
-				step([
-					$class           : 'hudson.plugins.robot.RobotPublisher',
-					outputPath       : 'rf\\_test-reports\\' + rfEnvVariables.BUILD_NUMBER + '\\*.*',
-					passThreshold    : 100,
-					unstableThreshold: 100,
-					otherFiles       : '',
-					reportFileName   : '*\\report*.html',
-					logFileName      : '*\\log*.html',
-					outputFileName   : '*\\output*.xml'
-				])
-				
-				
+				build job: 'Web-AutTests', propagate: false
 			} 
 		},
 		"SoapUI API" : { 
@@ -115,6 +101,18 @@ stage('Security Tests - IBM') {
 
 stage('Procesing test results') {
 	node ('master') {                           
+		step([
+			$class           : 'hudson.plugins.robot.RobotPublisher',
+			outputPath       : 'Web-AutTests/rf/_test-reports/**/*.*',
+			passThreshold    : 100,
+			unstableThreshold: 100,
+			otherFiles       : '',
+			reportFileName   : '*\\report*.html',
+			logFileName      : '*\\log*.html',
+			outputFileName   : '*\\output*.xml'
+		])
+		
+		
 		// Copy RF reports to the pipeline workspace
 		//step([$class: 'CopyArtifact', filter: 'rf/_test-reports/**/*.*', fingerprintArtifacts: true, projectName: 'WebAppFunctionalAutomatedTests-GUI', selector: [$class: 'LastCompletedBuildSelector']])
 		//step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'JUnitType', deleteOutputFiles: true, failIfNotNew: false, pattern: 'rf/_test-reports/**/*.xml', skipNoTestFiles: false, stopProcessingIfError: false]]])	
