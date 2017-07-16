@@ -11,3 +11,5 @@ sudo -S <<< "cd" rm -rf ./webgoat-server/target/*
 
 sudo -S <<< "cd" docker ps --filter status=dead --filter status=exited -aq | sudo xargs -r docker rm -v
 
+sudo -S <<< "cd" rm -rf /home/cd/jenkinsHome/workspace/ContinuousTesting/*
+
