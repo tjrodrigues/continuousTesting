@@ -103,7 +103,7 @@ stage('Procesing test results') {
 	node ('master') {                           
 		step([
 			$class           : 'hudson.plugins.robot.RobotPublisher',
-			outputPath       : '../Web-AutTests/rf/_test-reports/*/*.*',
+			outputPath       : '../Web-AutTests/rf/_test-reports/20170716230015/*.*',
 			passThreshold    : 100,
 			unstableThreshold: 100,
 			otherFiles       : '',
