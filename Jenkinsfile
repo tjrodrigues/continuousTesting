@@ -70,7 +70,6 @@ stage('Functional Tests') {
 	parallel (
 		"Robot Framework Web" : { 
 			node ('ProjectTestSupport') {                          
-				sh "echo Executing Robot Framework tests..." 
 				build job: 'Web-AutTests', propagate: false
 				
 			} 
@@ -83,7 +82,6 @@ stage('Functional Tests') {
 		},
 		"Robot Framework Mobile" : { 
 			node ('ProjectTestSupport') {                          
-				sh "echo Executing Mobile tests..." 
 			} 
 		}
 	)
