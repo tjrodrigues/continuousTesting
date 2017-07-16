@@ -95,7 +95,7 @@ stage('Performance Tests') {
 
 stage('Security Tests - IBM') {
 	node ('ProjectTestSupport') {                           
-		build job:'AppScan-IBM'
+		build job:'SecurityTests'
 		
 	} 
 }
