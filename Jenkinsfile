@@ -28,8 +28,8 @@ stage('Unit Test & Satic Analysis') {
 				def mvnHome
 				mvnHome = tool 'M3'
 				sh "echo Executing Unit tests..." 
-				sh "'${mvnHome}/bin/mvn' test"
-				junit 'webgoat-container/target/surefire-reports/*.xml'
+				//sh "'${mvnHome}/bin/mvn' test"
+				//junit 'webgoat-container/target/surefire-reports/*.xml'
 				//junit testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: 'webgoat-container/target/surefire-reports/*.xml'
 			} 
 		},
@@ -70,14 +70,27 @@ stage('Functional Tests') {
 	parallel (
 		"Robot Framework Web" : { 
 			node ('ProjectTestSupport') {                          
-				build job: 'Web-AutTests', propagate: false
+				def rfBuildResult = build job: 'Web-AutTests', propagate: false
+				def rfEnvVariables = rfBuildResult.getBuildVariables();
+				
+				step([
+					$class           : 'hudson.plugins.robot.RobotPublisher',
+					outputPath       : 'rf\\_test-reports\\' + rfEnvVariables.BUILD_NUMBER + '\\*.*',
+					passThreshold    : 100,
+					unstableThreshold: 100,
+					otherFiles       : '',
+					reportFileName   : '*\\report*.html',
+					logFileName      : '*\\log*.html',
+					outputFileName   : '*\\output*.xml'
+				])
+				
 				
 			} 
 		},
 		"SoapUI API" : { 
 		node ('ProjectTestSupport') { 
 				checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'soapui-tests/']]]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting']]])
-				build job: 'API-AutTests', propagate: false 
+				//build job: 'API-AutTests', propagate: false 
 			} 
 		},
 		"Robot Framework Mobile" : { 
@@ -89,13 +102,13 @@ stage('Functional Tests') {
 
 stage('Performance Tests') {
 	node ('ProjectTestSupport') {                          
-		build 'PerformanceTests'
+		//build 'PerformanceTests'
 	} 
 }
 
 stage('Security Tests - IBM') {
 	node ('ProjectTestSupport') {                           
-		build job:'SecurityTests'
+		//build job:'SecurityTests'
 		
 	} 
 }
