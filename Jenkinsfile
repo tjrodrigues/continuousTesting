@@ -95,7 +95,7 @@ stage('Security Tests - IBM AppScan') {
 	} 
 }
 
-stage 'Deployment'{
+stage ('Deployment'){
 	input 'Do you approve deployment?'
 	node('ProjectBuildEnv'){
 		//deploy things
