@@ -28,6 +28,7 @@ stage('Unit Test & Satic Analysis') {
 				def mvnHome
 				mvnHome = tool 'M3'
 				sh "echo Executing SonarQube Analysis..." 
+				checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false, timeout: 30]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting.git']]])
 				withSonarQubeEnv('sonar.critical.pt') {
 					if (isUnix()) {
 						sh "'${mvnHome}/bin/mvn' $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN"
