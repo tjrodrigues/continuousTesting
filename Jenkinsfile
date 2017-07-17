@@ -27,7 +27,7 @@ stage('Unit Test & Satic Analysis') {
 			node ('ProjectTestSupport') {   
 				def mvnHome
 				mvnHome = tool 'M3'
-				sh "echo Executing SonarQube Analysis..." 
+				//sh "echo Executing SonarQube Analysis..." 
 				withSonarQubeEnv('sonar.critical.pt') {
 					if (isUnix()) {
 						sh "'${mvnHome}/bin/mvn' $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN"
