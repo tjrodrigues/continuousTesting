@@ -5,7 +5,7 @@ stage ('Build'){
 		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false, timeout: 30]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting.git']]])
 		sh './clean-env.sh'
 		if (isUnix()) {
-			//sh "'${mvnHome}/bin/mvn' clean install"
+			sh "'${mvnHome}/bin/mvn' clean install"
 		} else {
 			bat(/"${mvnHome}\bin\mvn" install/)
 		}
@@ -30,7 +30,7 @@ stage('Unit Test & Satic Analysis') {
 				sh "echo Executing SonarQube Analysis..." 
 				withSonarQubeEnv('sonar.critical.pt') {
 					if (isUnix()) {
-						sh "'${mvnHome}/bin/mvn' test $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN"
+						sh "'${mvnHome}/bin/mvn' $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN"
 					} else {
 						bat(/"${mvnHome}\bin\mvn" $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN/)
 					}
