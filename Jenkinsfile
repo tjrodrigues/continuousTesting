@@ -24,7 +24,7 @@ stage('Unit Test & Satic Analysis') {
 			} 
 		},
 		"SonarQube" : { 
-			node ('ProjectTestSupport') {   
+			node ('ProjectBuildEnv') {   
 				def mvnHome
 				mvnHome = tool 'M3'
 				//sh "echo Executing SonarQube Analysis..." 
