@@ -61,13 +61,13 @@ stage('Functional Tests') {
 	parallel (
 		"Robot Framework Web" : { 
 			node ('ProjectTestSupport') {                          
-				//build job: 'Web-AutTests', propagate: false
+				build job: 'Web-AutTests', propagate: false
 			} 
 		},
 		"SoapUI API" : { 
 		node ('ProjectTestSupport') { 
 				checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'soapui-tests/']]]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting']]])
-				//build job: 'API-AutTests', propagate: false 
+				build job: 'API-AutTests', propagate: false 
 			} 
 		},
 		"Robot Framework Mobile" : { 
@@ -95,7 +95,7 @@ stage('Security Tests - IBM AppScan') {
 	} 
 }
 
-stage ('Deployment'){
+stage ('Deployment (Production)'){
 	input 'Do you approve deployment?'
 	node('ProjectBuildEnv'){
 		//deploy things
