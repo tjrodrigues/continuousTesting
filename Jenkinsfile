@@ -2,7 +2,7 @@ stage ('Build'){
 	node('ProjectBuildEnv'){
 		def mvnHome
 		mvnHome = tool 'M3'
-		//checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false, timeout: 30]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting.git']]])
+		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false, timeout: 30]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting.git']]])
 		sh './clean-env.sh'
 		if (isUnix()) {
 			//sh "'${mvnHome}/bin/mvn' clean install"
@@ -28,14 +28,14 @@ stage('Unit Test & Satic Analysis') {
 				def mvnHome
 				mvnHome = tool 'M3'
 				sh "echo Executing SonarQube Analysis..." 
-				checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false, timeout: 30]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting.git']]])
-				withSonarQubeEnv('sonar.critical.pt') {
-					if (isUnix()) {
-						sh "'${mvnHome}/bin/mvn' install $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN"
-					} else {
-						bat(/"${mvnHome}\bin\mvn" install $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN/)
-					}
-				} 
+				//checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false, timeout: 30]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting.git']]])
+				//withSonarQubeEnv('sonar.critical.pt') {
+				//	if (isUnix()) {
+				//		sh "'${mvnHome}/bin/mvn' install $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN"
+				//	} else {
+				//		bat(/"${mvnHome}\bin\mvn" install $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN/)
+				//	}
+				//} 
 			} 
 		}
 	)
@@ -66,8 +66,7 @@ stage('Functional Tests') {
 		},
 		"SoapUI API" : { 
 		node ('ProjectTestSupport') { 
-				checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'soapui-tests/']]]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/tjrodrigues/continuousTesting']]])
-				build job: 'API-AutTests', propagate: false 
+				//build job: 'API-AutTests', propagate: false 
 			} 
 		},
 		"Robot Framework Mobile" : { 
@@ -90,7 +89,7 @@ stage('Performance Tests - jMeter') {
 
 stage('Security Tests - IBM AppScan') {
 	node ('ProjectTestSupport') {                           
-		build job:'SecurityTests'
+		//build job:'SecurityTests'
 		
 	} 
 }
